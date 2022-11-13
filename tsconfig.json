@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "dist", //nome do diretorio com os arquivos compilados
+    "esModuleInterop": true, //evita problemas com os diversos tipos de importacao
+    "module": "es6", //qual padrao o javascript deve ser gerado
+    "moduleResolution": "Node"
+  },
+
+  "ts-node": {
+    "esm": true
+  }
+}
