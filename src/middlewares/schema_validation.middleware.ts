@@ -11,8 +11,8 @@ async function schemaValidation(
 ) {
   try {
     const route = request.route;
-    const path = route.path;
-    const method = request.method;
+    const path: string = route.path;
+    const method: string = request.method;
     const schema_config = schemas_configuration.find((schema) => {
       if (schema.path === path && schema.method === method) {
         return true;
@@ -30,39 +30,43 @@ async function schemaValidation(
       return;
     }
 
-    if (schema_config.uniques !== undefined) {
-      for (let i = 0, len = schema_config.uniques.length; i < len; i++) {
-        const config = schema_config.uniques[i];
-        const query = await connection.query(
-          `SELECT "${config.column_name}" FROM ${config.table} WHERE "${config.column_name}"=$1`,
-          [value[config.property]]
-        );
-        const NOT_EXIST = query.rowCount === 0 ? true : false;
+    if (schema_config.uniques === undefined) {
+      response.locals.safeData = value;
+      next();
+      return;
+    }
 
-        if (config.must_not_exist) {
-          if (!NOT_EXIST) {
-            if (config.error_details) {
-              response
-                .status(config.must_not_exist_status_code)
-                .send(`error at ${config.property}`);
-              return;
-            }
+    for (let i = 0, len = schema_config.uniques.length; i < len; i++) {
+      const config = schema_config.uniques[i];
+      const query = await connection.query(
+        `SELECT "${config.column_name}" FROM ${config.table} WHERE "${config.column_name}"=$1`,
+        [value[config.property]]
+      );
+      const NOT_EXIST = query.rowCount === 0 ? true : false;
 
-            response.sendStatus(config.must_not_exist_status_code);
+      if (config.must_not_exist) {
+        if (!NOT_EXIST) {
+          if (config.error_details) {
+            response
+              .status(config.must_not_exist_status_code)
+              .send(`error at ${config.property}`);
             return;
           }
-        } else {
-          if (NOT_EXIST) {
-            if (config.error_details) {
-              response
-                .status(config.must_not_exist_status_code)
-                .send(`error at ${config.property}`);
-              return;
-            }
 
-            response.sendStatus(config.must_not_exist_status_code);
+          response.sendStatus(config.must_not_exist_status_code);
+          return;
+        }
+      } else {
+        if (NOT_EXIST) {
+          if (config.error_details) {
+            response
+              .status(config.must_not_exist_status_code)
+              .send(`error at ${config.property}`);
             return;
           }
+
+          response.sendStatus(config.must_not_exist_status_code);
+          return;
         }
       }
     }

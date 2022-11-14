@@ -2,7 +2,7 @@ import { stripHtml } from "string-strip-html";
 import { STATUS_CODE } from "../protocols/status_code.js";
 import { Response, Request, NextFunction } from "express";
 
-const propertiesToSanitize = [
+const propertiesToSanitize: string[] = [
   "name",
   "personal_email",
   "institutional_email",
@@ -22,7 +22,12 @@ function html_sanitizer(
   response: Response,
   next: NextFunction
 ) {
-  const requestObjectsToSanitize = ["headers", "body", "query", "params"];
+  const requestObjectsToSanitize: string[] = [
+    "headers",
+    "body",
+    "query",
+    "params",
+  ];
 
   try {
     for (let j = 0, len0 = requestObjectsToSanitize.length; j < len0; j++) {

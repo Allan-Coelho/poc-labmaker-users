@@ -1,25 +1,7 @@
+import { schema_configuration } from "../protocols/schema_configuration.js";
 import { STATUS_CODE } from "../protocols/status_code.js";
 
-const schemas_configuration = Object.freeze([
-  {
-    path: "A rota que voce quer configurar",
-    method: "verbo http da rota",
-    schema_name:
-      "nome da propriedade que acessa o schema que vc criou em schemas.js",
-    request_data: "por onde virao os dados body | params | headers | query",
-    uniques: [
-      {
-        property:
-          "propriedade que vc quer que exista(ou nao). A propriedade da tabela e do corpo da requisicao devem ter o mesmo nome",
-        column_name:
-          "nome da coluna, no banco, que corresponde a essa propriedade",
-        table: "tabela onde se encontra a propriedade",
-        must_not_exist: true, //A propriedade nao deve existir: true. A propriedade deve existir: false.
-        must_not_exist_status_code: STATUS_CODE.CONFLICT, //erro que deve ser retornado ao usuário caso, por exemplo, a propriedade já exista
-        error_details: true, //caso true, retorna uma mensagem genérica. ex: 'error at "email"'
-      },
-    ],
-  },
+const schemas_configuration: schema_configuration[] = [
   {
     path: "/users/sign-up",
     method: "POST",
@@ -122,6 +104,6 @@ const schemas_configuration = Object.freeze([
     schema_name: "search_user",
     request_data: "query",
   },
-]);
+];
 
 export { schemas_configuration };
