@@ -11,6 +11,10 @@ const propertiesToSanitize = [
   "address_number",
   "address_additional_information",
   "institutional_id",
+  "user_id",
+  "permission_id",
+  "id",
+  "search_name",
 ];
 
 function html_sanitizer(

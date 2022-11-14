@@ -45,4 +45,30 @@ function updateUserPermission({
   );
 }
 
-export { insertUser, updateUserPermission };
+function deleteUser(user_id: number) {
+  return connection.query(`DELETE FROM ${TABLE} WHERE "id"=$1`, [user_id]);
+}
+
+function getUser(user_id: number) {
+  return connection.query(`SELECT * FROM ${TABLE} WHERE "id"=$1`, [user_id]);
+}
+
+function getUserByName(search_name: string) {
+  return connection.query(
+    `SELECT * FROM ${TABLE} WHERE lower(name) LIKE $1 ORDER BY name`,
+    [`${search_name.toLowerCase()}%`]
+  );
+}
+
+function countUsers() {
+  return connection.query(`SELECT COUNT(*) FROM ${TABLE}`);
+}
+
+export {
+  insertUser,
+  updateUserPermission,
+  deleteUser,
+  getUser,
+  getUserByName,
+  countUsers,
+};

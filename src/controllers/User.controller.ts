@@ -51,4 +51,79 @@ async function update_user_permission(request: Request, response: Response) {
   }
 }
 
-export { sign_up };
+async function delete_user(request: Request, response: Response) {
+  try {
+    const user_id: number = response.locals.safeData.id;
+    const query: QueryResult = await users_repository.deleteUser(user_id);
+
+    if (query.rowCount === 0) {
+      response.sendStatus(STATUS_CODE.SERVER_ERROR);
+      return;
+    }
+
+    response.sendStatus(STATUS_CODE.OK);
+  } catch (error) {
+    console.log(error);
+    response.sendStatus(STATUS_CODE.SERVER_ERROR);
+    return;
+  }
+}
+
+async function get_user(request: Request, response: Response) {
+  try {
+    const user_id: number = response.locals.safeData.id;
+    const query: QueryResult = await users_repository.getUser(user_id);
+
+    if (query.rowCount === 0) {
+      response.sendStatus(STATUS_CODE.SERVER_ERROR);
+      return;
+    }
+
+    response.send(query.rows[0]);
+  } catch (error) {
+    console.log(error);
+    response.sendStatus(STATUS_CODE.SERVER_ERROR);
+    return;
+  }
+}
+
+async function get_user_by_name(request: Request, response: Response) {
+  try {
+    const { search_name }: { search_name: string } = response.locals.safeData;
+    const query: QueryResult = await users_repository.getUserByName(
+      search_name
+    );
+
+    if (query.rowCount === 0) {
+      response.sendStatus(STATUS_CODE.NOT_FOUND);
+      return;
+    }
+
+    response.send(query.rows);
+  } catch (error) {
+    console.log(error);
+    response.sendStatus(STATUS_CODE.SERVER_ERROR);
+    return;
+  }
+}
+
+async function count_users(request: Request, response: Response) {
+  try {
+    const query: QueryResult = await users_repository.countUsers();
+
+    response.send(query.rows[0].count);
+  } catch (error) {
+    console.log(error);
+    response.sendStatus(STATUS_CODE.SERVER_ERROR);
+    return;
+  }
+}
+
+export {
+  sign_up,
+  update_user_permission,
+  delete_user,
+  get_user,
+  get_user_by_name,
+  count_users,
+};

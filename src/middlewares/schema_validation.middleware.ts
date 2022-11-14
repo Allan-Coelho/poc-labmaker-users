@@ -34,7 +34,7 @@ async function schemaValidation(
       for (let i = 0, len = schema_config.uniques.length; i < len; i++) {
         const config = schema_config.uniques[i];
         const query = await connection.query(
-          `SELECT "${config.property}" FROM ${config.table} WHERE "${config.property}"=$1`,
+          `SELECT "${config.column_name}" FROM ${config.table} WHERE "${config.column_name}"=$1`,
           [value[config.property]]
         );
         const NOT_EXIST = query.rowCount === 0 ? true : false;

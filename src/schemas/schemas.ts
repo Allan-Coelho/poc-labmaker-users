@@ -1,9 +1,7 @@
 import Joi from "joi";
-import { joiPasswordExtendCore } from "joi-password";
 import joi_phone from "joi-phone-number";
 import { CEP_REGEX } from "../enums/regexp.js";
 
-const JoiPassword = Joi.extend(joiPasswordExtendCore);
 const JoiPhone = Joi.extend(joi_phone);
 
 const schemas = {
@@ -25,24 +23,21 @@ const schemas = {
       .required(),
   }),
 
-  sign_in_schema: Joi.object({
-    institutional_email: Joi.string().min(1).email().required(),
-    password: JoiPassword.string()
-      .min(8)
-      .minOfSpecialCharacters(1)
-      .minOfLowercase(1)
-      .minOfUppercase(1)
-      .minOfNumeric(1)
-      .noWhiteSpaces()
-      .required(),
-  }),
+  update_user_permission_schema: Joi.object({
+    permission_id: Joi.number().integer().required(),
+    user_id: Joi.number().integer().required(),
+  }).unknown(false),
 
-  idSchema: Joi.object({
+  id_schema: Joi.object({
     id: Joi.number().integer().required(),
   }),
 
   urlSchema: Joi.object({
     url: Joi.string().uri().required(),
+  }),
+
+  search_user: Joi.object({
+    search_name: Joi.string().min(3).required(),
   }),
 };
 
