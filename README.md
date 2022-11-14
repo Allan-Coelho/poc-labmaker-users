@@ -1,3 +1,6 @@
+![labmaker logo](https://user-images.githubusercontent.com/63244077/201710991-a90b24d8-56a4-46a1-9c8b-7ef7077475e8.gif)
+
+
 # Usuários do Labmaker
 
 <p>Essa API foi feita para gerenciar os usuários que interagem com o Labmaker da USP São Carlos.<p/>
